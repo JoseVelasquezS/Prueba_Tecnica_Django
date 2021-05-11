@@ -1,0 +1,554 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Productos</title>
+	<meta charset="UTF-8">
+    
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+	<!--<link rel="stylesheet" type="text/css" href="{% static '/css/estilo.css' %" />-->
+  <!--
+
+    css 
+  -->	
+<style>
+  html,
+body {
+	height: 100%;
+	font-family: 'Roboto', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #222222;
+	margin: 0;
+	margin-bottom: 10px;
+	font-weight: 700;
+}
+
+h1 {
+	font-size: 60px;
+	margin-bottom: 40px;
+}
+
+h1 span {
+	background: #baff00;
+	padding: 0 10px;
+	color: #222222;
+	display: inline-block;
+}
+
+h2 {
+	font-size: 36px;
+}
+*{box-sizing:border-box;}
+
+form{
+	width:500px;
+	padding:16px;
+	border-radius:10px;
+	margin:auto;
+	background-color:#ccc;
+}
+
+form label{
+	width:72px;
+	font-weight:bold;
+	display:inline-block;
+}
+
+form input[type="text"],form input[type="number"],form select[type="select"],
+form input[type="email"]{
+	width:180px;
+	padding:3px 10px;
+	border:1px solid #f6f6f6;
+	border-radius:3px;
+	background-color:#f6f6f6;
+	margin:8px 0;
+	display:inline-block;
+}
+
+form input[type="submit"],[type="button"]{
+	width:100%;
+	padding:8px 16px;
+	margin-top:32px;
+	border:1px solid #000;
+	border-radius:5px;
+	display:block;
+	color:#fff;
+	background-color:#000;
+} 
+
+form input[type="submit"]:hover{
+	cursor:pointer;
+}
+
+textarea{
+	width:100%;
+	
+	border:1px solid #f6f6f6;
+	border-radius:3px;
+	background-color:#f6f6f6;			
+	margin:8px 0;
+	/*resize: vertical | horizontal | none | both*/
+	resize:none;
+	display:block;
+}
+
+
+</style>
+</head>
+<body>
+    <header >
+		<div class="container">
+			<div class="section-title">
+				<h2 class="text-center"> Registro de Productos</h2>
+            </div>
+		
+		</div>
+	
+		
+
+	</header>
+   
+    <div class="text-center">
+        <div class="text-center">
+            <h6>Actualiza los datos para ver la lista de productos y cargar los Id de detalle de productos.</h6>
+        </div>
+    </div> 
+    <div class="container">
+        <div class="row">
+    <!--<form  class= "col-md-6" method="POST" id="formulario">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Enviar" class="boton" name="">
+    </form>-->
+    <div class="col-md-6">
+        <div class="text-center">
+            <h4>Productos</h4>
+        </div>
+    <form  id="formulario1" method="POST">
+        
+        <!--<p>Id de Producto:<input type="text" name="IdProducto" size="40" id="idProducto"></p>
+        <input type="hidden" name="csrfmiddlewaretoken" value="OCcYwgpXtzPmSuNrakg7gI3oyFqxxzqj8u1hpWbs0oEmylvY4YWhGRXUZx7UR2wW">-->
+        <p>Nombre de Producto: <input type="text" name="nombreProducto" size="40" id="idNombre"></p>
+        <p>Precio de Producto (iva incluido): $<input type="number" name="ValorProdcuto" size="20" id="idPrecio"> </p>
+        <p>Detalles de Producto <textarea name="detalleProducto" id="idDescripcion" rows="5" cols="30" style="resize: none;"></textarea>
+        </p>
+    
+        <input type="submit" value="Guardar">
+        </p>
+    </form>
+</div>
+
+    
+    <div class="col-md-6">
+        <div class="text-center">
+            <h4>Detalle Producto</h4>
+        </div>
+        
+    <form  id="formulario2" method="POST">
+    <p>Id/Codigo Producto: <select type ="select" name="Prodcutos" id="opciones">
+
+            <!--Aqui se construyen las opciones del selector -->
+            
+            
+            </select></p>
+        <p>Cantidad :<input type="number" name="IdProducto" size="40" id="idCantidad"></p>
+        <input type="hidden" name="csrfmiddlewaretoken" value="OCcYwgpXtzPmSuNrakg7gI3oyFqxxzqj8u1hpWbs0oEmylvY4YWhGRXUZx7UR2wW">
+        
+        </p>
+        <input type="submit" value="Crear Detalle ">
+        <p> Detalles Realizados</p>
+        <p>Id Detalles<select type="select" name="Prodcutos" id="idDetalle">
+
+            <!--Aqui se construyen las opciones del selector de la tabla detalles-->
+            
+            
+            </select></p>
+        <input type="button" value="Ver Detalles" id="bDetalle">
+        
+        
+        </p>
+    </form>
+    </div>
+
+    
+</div>
+</div>
+
+<div><input type="button" value="Actualizar todos los datos / Actualizar lista de id Productos, id Detalles" id="actualizar"></div>
+
+<div>
+    <table class="table" data-order='[[ 1, "asc" ]]' data-page-length='25' id="tablaDatos" width="100%" cellspacing="0">
+    </table>
+</div>
+    
+
+    
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+        integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+        crossorigin="anonymous"></script>
+        
+        
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    
+    <script>
+    
+
+
+        $(function(){
+
+            $('#formulario2').on('submit',function(event){
+                event.preventDefault();
+                crearDetalle();
+                
+
+            })
+            $('#bDetalle').click(function(){
+                verDetalles();
+
+            });
+            $('#formulario1').on('submit',function(event){
+                event.preventDefault();
+                CrearEnvio1 ();
+
+            })
+            $('#actualizar').click(function(){
+                llamado ();
+                
+
+            });
+            function verDetalles(){
+                
+                $.ajax({
+                    
+                    url : "verDetalle/",
+                    type : "POST",
+                    data : { detalle : $('#idDetalle').val()},
+                    success : function(response){  
+                        text = "";
+                        var obj = JSON.parse(response);
+                        
+                        for (let i = 0; i < obj.length; i++) {
+                            
+                            text += "id Detalle: " + obj[i].pk +
+                             "\nid Producto es: " + obj[i].fields.idProducto +
+                             "\nCantidad: " + obj[i].fields.cantidad +
+                             " \nValorTotal: $" + obj[i].fields.valorTotal +
+                             " COP\nValorIva: $" + obj[i].fields.valorIva + " COP"
+
+                        } 
+                        
+                        alert(text)       
+                     },
+                })
+
+
+            }
+            function llamado(){
+                
+                $.ajax({
+                    
+                    url : "llamar/",
+                    type : "GET",
+                    success : function(response){                       
+                        var arrayPayObli = new Array("Código", "Nombre","Valor","Descripcion");
+                        tabla = new Table("tablaDatos", arrayPayObli, response);
+                        tabla.crearTabla();
+                        tabla.actualizar('opciones');
+                        actualizarIdDetalles('idDetalle');
+                     },
+
+                })
+
+
+            }
+            function CrearEnvio1(){
+                
+                $.ajax({
+                    
+                    url : "crearPost/",
+                    type : "POST",
+                    data: { producto: $('#idNombre').val(), descripcion : $('#idDescripcion').val(), precio : $('#idPrecio').val()},
+                    success : function(json){                        
+                        $('#idNombre').val("");
+                        $('#idDescripcion').val("");
+                        $('#idPrecio').val("");
+                        alert(" El Producto se guardo con exito") 
+
+                    },
+                })
+            }
+
+            function crearDetalle(){
+                $.ajax({
+                    
+                    url : "crearDetalle/",
+                    type : "POST",
+                    data: { idProducto: $('#opciones').val(), cantidad : $('#idCantidad').val()},
+                    success : function(json){
+                        var obj = JSON.parse(json);
+                        
+                        for (let i = 0; i < obj.length; i++) {
+                            if (obj[i].fields.precio){
+                                
+                                $.ajax({
+                        
+                                    url : "crearDetalle/",
+                                    type : "POST",
+                                    data: { idProducto: $('#opciones').val(), cantidad : $('#idCantidad').val(), precio : obj[i].fields.precio },
+                                    success : function(json){
+                                        $('#opciones').val("");
+                                        $('#idCantidad').val("");
+                                        alert( " El detalle de producto se creo con exito")
+
+
+                                    },
+                                 })
+                           }
+                        
+                       }      
+
+                    },
+                })
+
+
+            }
+
+        
+        });
+
+
+        
+    
+        
+        
+        
+        //*Method create Table Customers */
+    class Table {
+
+        constructor(id, arrayCell, jSon) {
+            this.id = id;
+            this.arrayCell = arrayCell;
+            this.jSon = jSon;
+            }
+
+        actualizar(parametro){
+            var objOpcion = document.getElementById(parametro);
+            var obj = JSON.parse(this.jSon);
+            
+
+            Option = "";
+            for (let i = 0; i < obj.length; i++) {
+
+            Option += '<option>' + obj[i].pk + '</option>'  
+            }
+            objOpcion.innerHTML = Option;
+        }
+        
+        crearTabla() {
+
+            var objTable = document.getElementById(this.id);
+            
+
+            let objThead = '<thead class="text-wine">';
+            let objtbody = '<tbody>';
+            let table = "";
+           
+            
+            var obj = JSON.parse(this.jSon);
+            
+            
+            
+            for (let j = 0; j < this.arrayCell.length; j++) {
+                objThead += '<th>' + this.arrayCell[j] + '</th>';
+                
+            }
+            
+            /*for (let k = 0; k < this.arrayCell.length - 1; k++) {
+                if (k == 0) {
+        3           objThead += '<tr>';
+                }
+                objThead += '<th><input type="text" class="form-control bg-light border-0 small" id="myInput' + k + '" onkeyup="searchTable(' + "'" + this.id + "'," + k + ')" placeholder="Search.." title="Search"></th>';
+                if (k == this.arrayCell.length) {
+                    objThead += '</tr>';
+                }
+            }*
+            for (let i = 0; i < this.jSon.length; i++) {
+
+                objtbody += '<tr><td>' + this.jSon[i].Client_identification +
+                    '</td><td>' + this.jSon[i].Client_name +
+                    '</td><td>' + this.jSon[i].Client_tel +
+                    '</td><td>' + this.jSon[i].Client_email +
+                    '</td><td>' + this.jSon[i].Client_contactName +
+                    '</td><td><button onclick="getDataEdit(' + this.jSon[i].Client_id + ');clearForm(' + "'form_customers'" + ', 0);" class="btn btn-primary" style="margin:0; padding:5px" value=""><i class="material-icons">border_color</i></button></td></tr>';
+                }*/
+            for (let i = 0; i < obj.length; i++) {
+
+                objtbody += '<tr><td>' + obj[i].pk+
+                    '</td><td>' + obj[i].fields.nombre +
+                    '</td><td> $ ' + obj[i].fields.precio+
+                    '</td><td>' + obj[i].fields.descripcion /* +
+                    '</td><td><button onclick="getDataEdit(' + obj[i].pk + ');clearForm(' + "'form_customers'" + ', 0);" class="btn btn-primary" style="margin:0; padding:5px" value=""><i class="material-icons">Editar</i></button></td>'+
+                    '</td><td><button onclick="getDataDelete(' + obj[i].pk + ');clearForm(' + "'form_customers'" + ', 0);" class="btn btn-primary" style="margin:0; padding:5px" value=""><i class="material-icons">Eliminar</i></button></td>*/'</tr>';
+                }
+            
+            
+            objtbody += '</tbody>';
+            objThead += '</thead>';
+            table = objThead + objtbody;
+            objTable.innerHTML = table;
+        }
+    }
+    // Ver Detalles por ID 
+    //_____________________//
+    function actualizarIdDetalles(parametro){
+            
+            $.ajax({
+                    
+                    url : "llamarDetalle/",
+                    type : "GET",
+                    success : function(response){                       
+                        var objOpcion = document.getElementById(parametro);
+                        var obj = JSON.parse(response);
+                        
+
+                        Option = "";
+                        for (let i = 0; i < obj.length; i++) {
+
+                           Option += '<option>' + obj[i].pk + '</option>'  
+                        }       
+                        objOpcion.innerHTML = Option;
+                         },
+
+                })
+          
+        }
+    //Editar Producto por ID
+    //_____________________//
+    
+
+/*
+    function getDataDelete(varId){
+        conosle.log(varId)
+        $.ajax({
+                    
+                    url : "crearPost/",
+                    type : "POST",
+                    data: { producto: $('#idNombre').val(), descripcion : $('#idDescripcion').val(), precio : $('#idPrecio').val()},
+                    success : function(json){
+                        
+
+
+                        $('#idNombre').val("");
+                        $('#idDescripcion').val("");
+                        $('#idPrecio').val("");
+                        
+
+                        console.log(json);
+
+    },
+    })
+}
+    
+
+      /*  $(document).on('submit', '#formulario',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "crear" %}',
+                data:{
+                    titulo:$('#titulo').val(),
+                    descripcion:$('#descripcion').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    document.getElementById("post-form").reset();
+                    $(".posts").prepend('<div class="col-md-6">'+
+                        '<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">' +
+                            '<div class="col p-4 d-flex flex-column position-static">' +
+                                '<h3 class="mb-0">' + json.titulo + '</h3>' +
+                                '<p class="mb-auto">' + json.descripcion + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' 
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+*/
+
+              // Esta funcion obtiene un cookie con un nombre de pila
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // ¿Esta cadena de cookies comienza con el nombre que queremos?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+    La funcion abajo creará un header con csrf_token
+    */
+
+    function csrfSafeMethod(method) {
+       
+        //Este metodo HTTP no requiere la protecion CSRF  
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        //  prueba que una URL dada es una URL del mismo origen
+        // url podría ser relativo o esquema relativo o absoluto
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Permitir URLs absolutas o relativas al mismo origen
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // o cualquier otra URL que no sea un esquema relativo o absoluto, es decir, relativo.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Envia el Token al mismo origen,solo URL relativas.
+                // Envíe el token solo si el método garantiza la protección CSRF
+                // Usando el valor CSRFToken adquirido anteriormente
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    </script>
+</body>
+</html>
