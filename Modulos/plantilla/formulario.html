@@ -8,10 +8,10 @@
     
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
-	<!--<link rel="stylesheet" type="text/css" href="{% static '/css/estilo.css' %" />-->
+
   <!--
 
-    css 
+     codigo correspondiente a diseño por css, para los formularios y botones 
   -->	
 <style>
   html,
@@ -96,7 +96,6 @@ textarea{
 	border-radius:3px;
 	background-color:#f6f6f6;			
 	margin:8px 0;
-	/*resize: vertical | horizontal | none | both*/
 	resize:none;
 	display:block;
 }
@@ -104,6 +103,7 @@ textarea{
 
 </style>
 </head>
+
 <body>
     <header >
 		<div class="container">
@@ -124,6 +124,8 @@ textarea{
     </div> 
     <div class="container">
         <div class="row">
+
+
     <!--<form  class= "col-md-6" method="POST" id="formulario">
         {% csrf_token %}
         {{form}}
@@ -206,8 +208,9 @@ textarea{
     
     <script>
     
-
-
+//----------------------------------------------------------------------------------------//
+//--------Funcion que llama las interacciones de los formularios y botones del proyecto---//
+//----------------------------------------------------------------------------------------//
         $(function(){
 
             $('#formulario2').on('submit',function(event){
@@ -230,10 +233,14 @@ textarea{
                 
 
             });
-            function verDetalles(){
-                
-                $.ajax({
-                    
+
+            //--------------------------------------------------------------------//
+            //-- Aqui se envia la peticion para visualizar los detalles guardados //
+            //-- por Id. Se ejecuta y envia .JSON mediante una peticion POST.     //
+            //--------------------------------------------------------------------//
+
+            function verDetalles(){    
+                $.ajax({        
                     url : "verDetalle/",
                     type : "POST",
                     data : { detalle : $('#idDetalle').val()},
@@ -248,19 +255,23 @@ textarea{
                              "\nCantidad: " + obj[i].fields.cantidad +
                              " \nValorTotal: $" + obj[i].fields.valorTotal +
                              " COP\nValorIva: $" + obj[i].fields.valorIva + " COP"
-
                         } 
-                        
                         alert(text)       
                      },
                 })
-
-
             }
+
+
+            //----------------------------------------------------------------------//
+            //-- Aqui se envia la peticion para visualizar los prodcutos            //
+            //-- Se ejecuta y envia .JSON mediante una peticion GET.                //
+            //-- Al recibir la respuesta de la peticion, se llama a la funcion      //
+            //-- que crea la tabla donde se despliega todos los prodcutos guardados.//
+            //----------------------------------------------------------------------//
+
+
             function llamado(){
-                
                 $.ajax({
-                    
                     url : "llamar/",
                     type : "GET",
                     success : function(response){                       
@@ -270,15 +281,19 @@ textarea{
                         tabla.actualizar('opciones');
                         actualizarIdDetalles('idDetalle');
                      },
-
                 })
-
-
             }
+
+
+            //--------------------------------------------------------------------//
+            //-- Aqui se envia la peticion para GUARDAR un producto, se llaman    //
+            //-- los valores que estan en las casillas de descripcion, prodcuto   //
+            //-- y precio. Se ejecuta y envia .JSON mediante una peticion POST.   //
+            //--------------------------------------------------------------------//
+
+
             function CrearEnvio1(){
-                
-                $.ajax({
-                    
+                $.ajax({  
                     url : "crearPost/",
                     type : "POST",
                     data: { producto: $('#idNombre').val(), descripcion : $('#idDescripcion').val(), precio : $('#idPrecio').val()},
@@ -287,14 +302,19 @@ textarea{
                         $('#idDescripcion').val("");
                         $('#idPrecio').val("");
                         alert(" El Producto se guardo con exito") 
-
                     },
                 })
             }
 
+            //--------------------------------------------------------------------//
+            //-- Aqui se envia la peticion para GUARDAR un detalle, se llaman     //
+            //-- los valores de id de prodcuto y cantidad- el valor de total y    //
+            //-- valor iva se guardan automaticamente.                            //
+            //--------------------------------------------------------------------//
+
+
             function crearDetalle(){
-                $.ajax({
-                    
+                $.ajax({   
                     url : "crearDetalle/",
                     type : "POST",
                     data: { idProducto: $('#opciones').val(), cantidad : $('#idCantidad').val()},
@@ -313,30 +333,19 @@ textarea{
                                         $('#opciones').val("");
                                         $('#idCantidad').val("");
                                         alert( " El detalle de producto se creo con exito")
-
-
                                     },
                                  })
                            }
-                        
                        }      
-
                     },
                 })
-
-
             }
-
-        
         });
 
-
-        
-    
-        
-        
-        
-        //*Method create Table Customers */
+    //--------------------------------------------------------------------//
+    //-- Creacion de tabla, para desplegar los datos guardados en DB      //
+    //--------------------------------------------------------------------//        
+       
     class Table {
 
         constructor(id, arrayCell, jSon) {
@@ -361,25 +370,20 @@ textarea{
         crearTabla() {
 
             var objTable = document.getElementById(this.id);
-            
-
             let objThead = '<thead class="text-wine">';
             let objtbody = '<tbody>';
             let table = "";
-           
-            
             var obj = JSON.parse(this.jSon);
             
-            
-            
             for (let j = 0; j < this.arrayCell.length; j++) {
-                objThead += '<th>' + this.arrayCell[j] + '</th>';
-                
+                objThead += '<th>' + this.arrayCell[j] + '</th>';   
             }
             
-            /*for (let k = 0; k < this.arrayCell.length - 1; k++) {
+            /*Aqui se realiza el filtrado de prodcuto ya sea por id o nombre */
+            /*
+            for (let k = 0; k < this.arrayCell.length - 1; k++) {
                 if (k == 0) {
-        3           objThead += '<tr>';
+                   objThead += '<tr>';
                 }
                 objThead += '<th><input type="text" class="form-control bg-light border-0 small" id="myInput' + k + '" onkeyup="searchTable(' + "'" + this.id + "'," + k + ')" placeholder="Search.." title="Search"></th>';
                 if (k == this.arrayCell.length) {
@@ -404,20 +408,23 @@ textarea{
                     '</td><td><button onclick="getDataEdit(' + obj[i].pk + ');clearForm(' + "'form_customers'" + ', 0);" class="btn btn-primary" style="margin:0; padding:5px" value=""><i class="material-icons">Editar</i></button></td>'+
                     '</td><td><button onclick="getDataDelete(' + obj[i].pk + ');clearForm(' + "'form_customers'" + ', 0);" class="btn btn-primary" style="margin:0; padding:5px" value=""><i class="material-icons">Eliminar</i></button></td>*/'</tr>';
                 }
-            
-            
+                       
             objtbody += '</tbody>';
             objThead += '</thead>';
             table = objThead + objtbody;
             objTable.innerHTML = table;
         }
     }
-    // Ver Detalles por ID 
-    //_____________________//
+
+    //-----------------------------------------------------------------------//
+    //-- Aqui se llaman los valores de id de detalles para ser visualizados  //
+    //-- en la pagina.                                                       //
+    //-----------------------------------------------------------------------//   
+
+    
     function actualizarIdDetalles(parametro){
-            
+           
             $.ajax({
-                    
                     url : "llamarDetalle/",
                     type : "GET",
                     success : function(response){                       
@@ -432,12 +439,12 @@ textarea{
                         }       
                         objOpcion.innerHTML = Option;
                          },
-
                 })
-          
-        }
-    //Editar Producto por ID
-    //_____________________//
+    }
+
+    //-----------------------------------------------------------------------//
+    //--Editar Producto por ID
+    //-----------------------------------------------------------------------//
     
 
 /*
@@ -496,14 +503,19 @@ textarea{
         });
 */
 
-              // Esta funcion obtiene un cookie con un nombre de pila
+    //-----------------------------------------------------------------------//
+    //--Esta funcion obtiene un cookie con un nombre de pila- para ejercer la 
+    //-- conexion.
+    //-----------------------------------------------------------------------//
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
             var cookies = document.cookie.split(';');
             for (var i = 0; i < cookies.length; i++) {
                 var cookie = jQuery.trim(cookies[i]);
+
                 // ¿Esta cadena de cookies comienza con el nombre que queremos?
+
                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -514,9 +526,9 @@ textarea{
     }
     var csrftoken = getCookie('csrftoken');
 
-    /*
-    La funcion abajo creará un header con csrf_token
-    */
+    //-----------------------------------------------------------------------//
+    //--La funcion abajo creará un header con csrf_token
+    //-----------------------------------------------------------------------//
 
     function csrfSafeMethod(method) {
        
