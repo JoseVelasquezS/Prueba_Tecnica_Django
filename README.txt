@@ -7,7 +7,7 @@ python --version
 
 
 en el cmd de windows, de no tener instalado python, debes ir a la pagina principal de python y descargar python en su version 3.9.5,
-en el mimento de ejecutar el paquete de instalacion que has descargado, no olvide marca la casilla de PATH. para poder ejecutar 
+en el momento de ejecutar el paquete de instalacion que has descargado, no olvide marca la casilla de PATH. para poder ejecutar 
 python desde el cmd.
 _____________________________________________________________________________________________________________
 
